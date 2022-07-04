@@ -1,0 +1,13 @@
+overwrite: true
+schema:
+  - https://pokestore-next.myshopify.com/api/API-VERSION/graphql:
+      headers:
+        X-Shopify-Storefront-Access-Token: YOUR-TOKEN
+documents: "src/**/*.{ts,tsx}"
+generates:
+  src/types/shopify.type.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+    config:
+      typesPrefix: Shopify
