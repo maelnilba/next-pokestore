@@ -1,67 +1,95 @@
 import Carousel from "@components/carousel";
-import Footer from "@components/footer";
-import NavigationBar from "@components/navigation";
-import { Card, ImagesPreview } from "@components/product";
+import { Card, ImagesPreview, SelectVariant } from "@components/product";
 import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
 import { trpc } from "utils/trpc";
+import { useStore } from "utils/zustand";
 
 const Index: NextPage<ServerSideProps> = ({
   handleCollection,
   handleProduct,
 }) => {
+  const router = useRouter();
+  const { query } = router;
+  const { variant } = query;
+  const { update } = useStore((store) => ({
+    update: store.update,
+  }));
+
   const { data: product } = trpc.useQuery([
-    "products.getByHandle",
+    "products.getProductVariantsByHandle",
     { handle: handleProduct },
   ]);
+
+  const selectedVariant = useMemo(() => {
+    if (!product) return undefined;
+    if (!product.product) return undefined;
+    if (typeof variant !== "string") return product.product.variants.edges[0]!;
+    else {
+      return (
+        product.product.variants.edges.find((edge) =>
+          edge.node.id.includes(variant)
+        ) || product.product.variants.edges[0]!
+      );
+    }
+  }, [product, variant]);
+  const { mutate: addCart } = trpc.useMutation(["cart.cartLinesAdd"], {
+    onSuccess: (data) => {
+      data && update(data);
+    },
+  });
+  const handleAddCart = (productId: string) => {
+    addCart({
+      lines: [
+        {
+          merchandiseId: productId,
+        },
+      ],
+    });
+  };
   if (!product) return <div>is loading...</div>;
-  console.log(product);
   return (
     <div>
-      <NavigationBar />
       {product.product && (
         <>
           <div className="mb-40 flex flex-col md:flex-row justify-center gap-20">
             <ImagesPreview images={product.product.images.edges} />
-            <div className="flex flex-col flex-[0.75] gap-4">
+            <div className="flex flex-col flex-[0.75] gap-4 mx-8 sm:mx-4">
               <div className="prose lg:prose-lg">
                 <h2>{product.product.title}</h2>
-                <h3>{product.product.priceRange.minVariantPrice.amount}€</h3>
+                <h3>{selectedVariant?.node.priceV2.amount}€</h3>
               </div>
               <div className="flex flex-row gap-2">
                 {product.product.options.length > 0 &&
                   product.product.options[0]?.name !== "Title" && (
-                    <>
-                      {product.product.options.map((option) => (
-                        <div key={option.id}>
-                          <label
-                            htmlFor={option.name}
-                            className="block mb-2 text-sm font-medium text-gray-900 "
-                          >
-                            Select an {option.name}
-                          </label>
-                          <select
-                            id={option.name}
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                          >
-                            {option.values.map((value) => (
-                              <option key={value} value={value}>
-                                {value}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      ))}
-                    </>
+                    <SelectVariant
+                      options={product.product.options}
+                      variants={product.product.variants.edges.map((edge) => {
+                        return {
+                          id: edge.node.id,
+                          selectedOptions: edge.node.selectedOptions,
+                        };
+                      })}
+                      currentVariantOptions={
+                        selectedVariant?.node.selectedOptions
+                      }
+                    />
                   )}
               </div>
               <div className="flex justify-start">
                 <button
                   className="btn gap-2 rounded-md text-base-100"
                   disabled={!product.product.availableForSale}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!selectedVariant) return;
+                    handleAddCart(selectedVariant.node.id);
+                  }}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -90,17 +118,13 @@ const Index: NextPage<ServerSideProps> = ({
           <div className=" items-center w-screen">
             <div className="flex justify-center">
               <div className="prose lg:prose-lg ">
-                <h1>Nos recommendations</h1>
+                <h1>Our recommendations</h1>
               </div>
             </div>
             <Recommendations productId={product.product.id} />
           </div>
-          {/* <div className="text-xs">
-            {product && <pre>{JSON.stringify(product, null, 2)}</pre>}
-          </div> */}
         </>
       )}
-      <Footer />
     </div>
   );
 };

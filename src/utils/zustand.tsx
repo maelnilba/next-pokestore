@@ -1,20 +1,49 @@
 import { ReactNode, useMemo } from "react";
 import create, { EqualityChecker, StateSelector } from "zustand";
 import { createContext, useContext } from "react";
-import { ResponseShopify } from "server/router";
-import type {
-  ShopifyCreateCartMutation,
-  ShopifyGetLiteCartQuery,
-} from "types/shopify.type";
-import { getCookie, hasCookie } from "cookies-next";
 
 // https://codesandbox.io/s/ku82o
 
 type StoreType = ReturnType<typeof initStore> | undefined;
 let store: StoreType;
-type Cart =
-  | ResponseShopify<ShopifyGetLiteCartQuery>["body"]["data"]
-  | ResponseShopify<ShopifyCreateCartMutation>["body"]["data"]["cartCreate"];
+
+type Cart = {
+  __typename?: string | undefined;
+  cart?:
+    | {
+        __typename?: string | undefined;
+        id: string;
+        lines: {
+          __typename?: "CartLineConnection";
+          nodes: Array<{
+            __typename?: "CartLine";
+            quantity: number;
+            merchandise: {
+              __typename?: "ProductVariant";
+              id: string;
+              title: string;
+              priceV2: {
+                __typename?: "MoneyV2";
+                amount: any;
+              };
+              image?: {
+                __typename?: "Image";
+                url: any;
+                id?: string | null;
+              } | null;
+              product: {
+                __typename?: "Product";
+                handle: string;
+                id: string;
+              };
+            };
+          }>;
+        };
+      }
+    | null
+    | undefined;
+};
+
 export const StoreContext = createContext<StoreType | null>(null);
 type initialStateType = typeof initialState;
 interface StoreStateType extends initialStateType {

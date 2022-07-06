@@ -13,6 +13,7 @@ import type {
 } from "types/shopify.type";
 import { getCookie, hasCookie, setCookie } from "cookies-next";
 import { TRPCError } from "@trpc/server";
+import { NextApiRequest, NextApiResponse } from "next/types";
 
 const COOKIE_CART_ID = "cartid";
 
@@ -53,10 +54,10 @@ export const GetCartRouter = createRouter()
   })
   .query("getCart", {
     async resolve({ ctx }) {
-      const cartId = getCookie(COOKIE_CART_ID, {
+      const cartId = getCardIdCookie({
         req: ctx.req,
         res: ctx.res,
-      })?.toString();
+      });
       const data = (await ctx.shopifyStore.query({
         data: { query: CartSchema.getLiteCartById, variables: { id: cartId } },
       })) as ResponseShopify<ShopifyGetLiteCartQuery>;
@@ -83,10 +84,10 @@ export const GetCartRouter = createRouter()
       }),
     }),
     async resolve({ input, ctx }) {
-      const cartId = getCookie(COOKIE_CART_ID, {
+      const cartId = getCardIdCookie({
         req: ctx.req,
         res: ctx.res,
-      })?.toString();
+      });
       const data = (await ctx.shopifyStore.query({
         data: {
           query: CartSchema.cartBuyerIdentityUpdate,
@@ -105,10 +106,10 @@ export const GetCartRouter = createRouter()
       discountCodes: z.string().array(),
     }),
     async resolve({ input, ctx }) {
-      const cartId = getCookie(COOKIE_CART_ID, {
+      const cartId = getCardIdCookie({
         req: ctx.req,
         res: ctx.res,
-      })?.toString();
+      });
       const data = (await ctx.shopifyStore.query({
         data: {
           query: CartSchema.cartDiscountCodesUpdate,
@@ -132,10 +133,10 @@ export const GetCartRouter = createRouter()
         .array(),
     }),
     async resolve({ input, ctx }) {
-      const cartId = getCookie(COOKIE_CART_ID, {
+      const cartId = getCardIdCookie({
         req: ctx.req,
         res: ctx.res,
-      })?.toString();
+      });
       const data = (await ctx.shopifyStore.query({
         data: {
           query: CartSchema.cartLinesAdd,
@@ -154,10 +155,10 @@ export const GetCartRouter = createRouter()
       linesIds: z.string().array(),
     }),
     async resolve({ input, ctx }) {
-      const cartId = getCookie(COOKIE_CART_ID, {
+      const cartId = getCardIdCookie({
         req: ctx.req,
         res: ctx.res,
-      })?.toString();
+      });
       const data = (await ctx.shopifyStore.query({
         data: {
           query: CartSchema.cartLinesRemove,
@@ -182,10 +183,10 @@ export const GetCartRouter = createRouter()
         .array(),
     }),
     async resolve({ input, ctx }) {
-      const cartId = getCookie(COOKIE_CART_ID, {
+      const cartId = getCardIdCookie({
         req: ctx.req,
         res: ctx.res,
-      })?.toString();
+      });
       const data = (await ctx.shopifyStore.query({
         data: {
           query: CartSchema.cartLinesUpdate,
@@ -199,3 +200,20 @@ export const GetCartRouter = createRouter()
       return data.body.data.cartLinesUpdate;
     },
   });
+
+interface getCardIdCookieParams {
+  req: NextApiRequest;
+  res: NextApiResponse;
+}
+const getCardIdCookie = ({
+  req,
+  res,
+}: getCardIdCookieParams): string | TRPCError => {
+  if (!hasCookie(COOKIE_CART_ID, { req, res })) {
+    throw new TRPCError({ code: "PRECONDITION_FAILED" });
+  }
+  return getCookie(COOKIE_CART_ID, {
+    req,
+    res,
+  })!.toString();
+};

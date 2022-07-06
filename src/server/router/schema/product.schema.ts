@@ -98,3 +98,45 @@ export const getProductsRecommendations = gql`
     }
   }
 `;
+
+export const getProductVariantsByHandle = gql`
+  query getProductVariantsByHandle($handle: String!) {
+    product(handle: $handle) {
+      id
+      availableForSale
+      description
+      images(first: 10) {
+        edges {
+          node {
+            id
+            url
+          }
+        }
+      }
+      options(first: 100) {
+        id
+        name
+        values
+      }
+      productType
+      tags
+      title
+      variants(first: 100) {
+        edges {
+          node {
+            id
+            priceV2 {
+              amount
+            }
+            selectedOptions {
+              name
+              value
+            }
+            quantityAvailable
+            title
+          }
+        }
+      }
+    }
+  }
+`;

@@ -1,8 +1,6 @@
 import BackgroundVideo from "@components/background-video";
 import { BannerWithTitle } from "@components/banner";
 import Carousel from "@components/carousel";
-import Footer from "@components/footer";
-import NavigationBar from "@components/navigation";
 import { Card } from "@components/product";
 import type { NextPage } from "next";
 import { trpc } from "utils/trpc";
@@ -21,7 +19,6 @@ const Index: NextPage = () => {
 
   return (
     <div>
-      <NavigationBar />
       <div className="mb-10 flex flex-col items-center w-full">
         <BackgroundVideo />
         <div className="items-center flex flex-col px-10  w-screen">
@@ -91,7 +88,6 @@ const Index: NextPage = () => {
           <p>Recently seen</p>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

@@ -1,6 +1,5 @@
-import Footer from "@components/footer";
 import Gallery from "@components/gallery";
-import NavigationBar, { CollectionsList } from "@components/navigation";
+import { CollectionsList } from "@components/navigation";
 import { Card } from "@components/product";
 import type {
   GetServerSidePropsContext,
@@ -20,7 +19,6 @@ const Index: NextPage<ServerSideProps> = ({ handleCollection }) => {
   ]);
   return (
     <div>
-      <NavigationBar />
       <div className="mb-10 flex flex-col md:flex-row">
         <div className="md:sticky md:top-10 h-max">
           {menu && (
@@ -54,7 +52,6 @@ const Index: NextPage<ServerSideProps> = ({ handleCollection }) => {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

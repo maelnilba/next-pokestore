@@ -6983,3 +6983,10 @@ export type ShopifyGetProductsRecommendationsQueryVariables = Exact<{
 
 
 export type ShopifyGetProductsRecommendationsQuery = { __typename?: 'QueryRoot', productRecommendations?: Array<{ __typename?: 'Product', id: string, title: string, handle: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, id?: string | null } }> }, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any }, maxVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string } }> } }> | null };
+
+export type ShopifyGetProductVariantsByHandleQueryVariables = Exact<{
+  handle: Scalars['String'];
+}>;
+
+
+export type ShopifyGetProductVariantsByHandleQuery = { __typename?: 'QueryRoot', product?: { __typename?: 'Product', id: string, availableForSale: boolean, description: string, productType: string, tags: Array<string>, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any } }> }, options: Array<{ __typename?: 'ProductOption', id: string, name: string, values: Array<string> }>, variants: { __typename?: 'ProductVariantConnection', edges: Array<{ __typename?: 'ProductVariantEdge', node: { __typename?: 'ProductVariant', id: string, quantityAvailable?: number | null, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, selectedOptions: Array<{ __typename?: 'SelectedOption', name: string, value: string }> } }> } } | null };

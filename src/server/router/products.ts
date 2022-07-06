@@ -8,6 +8,7 @@ import type {
   ShopifyGetProductByHandleVariantBySelectedOptionsQuery,
   ShopifyGetProductByIdQuery,
   ShopifyGetProductsRecommendationsQuery,
+  ShopifyGetProductVariantsByHandleQuery,
 } from "types/shopify.type";
 import { ProductSchema } from "./schema";
 export const GetProductRouter = createRouter()
@@ -34,6 +35,21 @@ export const GetProductRouter = createRouter()
           variables: { handle: input.handle },
         },
       })) as ResponseShopify<ShopifyGetProductByHandleQuery>;
+      if (data.body.errors) console.error(data.body.errors);
+      return data.body.data;
+    },
+  })
+  .query("getProductVariantsByHandle", {
+    input: z.object({
+      handle: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const data = (await ctx.shopifyStore.query({
+        data: {
+          query: ProductSchema.getProductVariantsByHandle,
+          variables: { handle: input.handle },
+        },
+      })) as ResponseShopify<ShopifyGetProductVariantsByHandleQuery>;
       if (data.body.errors) console.error(data.body.errors);
       return data.body.data;
     },
