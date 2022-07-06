@@ -6846,6 +6846,60 @@ export enum ShopifyWeightUnit {
   Pounds = 'POUNDS'
 }
 
+export type ShopifyCartDetailsFragment = { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } };
+
+export type ShopifyCreateCartMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ShopifyCreateCartMutation = { __typename?: 'Mutation', cartCreate?: { __typename?: 'CartCreatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+
+export type ShopifyCartBuyerIdentityUpdateMutationVariables = Exact<{
+  cartId: Scalars['ID'];
+  buyerIdentity: ShopifyCartBuyerIdentityInput;
+}>;
+
+
+export type ShopifyCartBuyerIdentityUpdateMutation = { __typename?: 'Mutation', cartBuyerIdentityUpdate?: { __typename?: 'CartBuyerIdentityUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+
+export type ShopifyCartDiscountCodesUpdateMutationVariables = Exact<{
+  cartId: Scalars['ID'];
+  discountCodes?: InputMaybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type ShopifyCartDiscountCodesUpdateMutation = { __typename?: 'Mutation', cartDiscountCodesUpdate?: { __typename?: 'CartDiscountCodesUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+
+export type ShopifyCartLinesAddMutationVariables = Exact<{
+  cartId: Scalars['ID'];
+  lines: Array<ShopifyCartLineInput> | ShopifyCartLineInput;
+}>;
+
+
+export type ShopifyCartLinesAddMutation = { __typename?: 'Mutation', cartLinesAdd?: { __typename?: 'CartLinesAddPayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+
+export type ShopifyCartLinesRemoveMutationVariables = Exact<{
+  cartId: Scalars['ID'];
+  lineIds: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+
+export type ShopifyCartLinesRemoveMutation = { __typename?: 'Mutation', cartLinesRemove?: { __typename?: 'CartLinesRemovePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+
+export type ShopifyCartLinesUpdateMutationVariables = Exact<{
+  cartId: Scalars['ID'];
+  lines: Array<ShopifyCartLineUpdateInput> | ShopifyCartLineUpdateInput;
+}>;
+
+
+export type ShopifyCartLinesUpdateMutation = { __typename?: 'Mutation', cartLinesUpdate?: { __typename?: 'CartLinesUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+
+export type ShopifyGetLiteCartQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ShopifyGetLiteCartQuery = { __typename?: 'QueryRoot', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null };
+
 export type ShopifyGetAllCollectionsQueryVariables = Exact<{
   first: Scalars['Int'];
 }>;
@@ -6865,14 +6919,14 @@ export type ShopifyGetCollectionByIdWithProductsQueryVariables = Exact<{
 }>;
 
 
-export type ShopifyGetCollectionByIdWithProductsQuery = { __typename?: 'QueryRoot', collection?: { __typename?: 'Collection', id: string, handle: string, description: string, descriptionHtml: any, products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, src: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> } } | null };
+export type ShopifyGetCollectionByIdWithProductsQuery = { __typename?: 'QueryRoot', collection?: { __typename?: 'Collection', id: string, handle: string, description: string, descriptionHtml: any, products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> } } | null };
 
 export type ShopifyGetCollectionByHandleWithProductsQueryVariables = Exact<{
   handle: Scalars['String'];
 }>;
 
 
-export type ShopifyGetCollectionByHandleWithProductsQuery = { __typename?: 'QueryRoot', collection?: { __typename?: 'Collection', id: string, handle: string, description: string, descriptionHtml: any, products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, src: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> } } | null };
+export type ShopifyGetCollectionByHandleWithProductsQuery = { __typename?: 'QueryRoot', collection?: { __typename?: 'Collection', id: string, handle: string, description: string, descriptionHtml: any, products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> } } | null };
 
 export type ShopifyGetMenuByHandleQueryVariables = Exact<{
   handle: Scalars['String'];
@@ -6881,7 +6935,7 @@ export type ShopifyGetMenuByHandleQueryVariables = Exact<{
 
 export type ShopifyGetMenuByHandleQuery = { __typename?: 'QueryRoot', menu?: { __typename?: 'Menu', itemsCount: number, id: string, items: Array<{ __typename?: 'MenuItem', id: string, url?: any | null, type: ShopifyMenuItemType, title: string, resourceId?: string | null, items: Array<{ __typename?: 'MenuItem', id: string, url?: any | null, type: ShopifyMenuItemType, title: string, resourceId?: string | null }> }> } | null };
 
-export type ShopifyProductsDetailsFragment = { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, src: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> };
+export type ShopifyProductsDetailsFragment = { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> };
 
 export type ShopifyProductDetailsFragment = { __typename?: 'Product', id: string, availableForSale: boolean, description: string, productType: string, tags: Array<string>, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, options: Array<{ __typename?: 'ProductOption', id: string, name: string, values: Array<string> }> };
 
@@ -6921,4 +6975,11 @@ export type ShopifyGetNewArrivalsQueryVariables = Exact<{
 }>;
 
 
-export type ShopifyGetNewArrivalsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, src: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> } };
+export type ShopifyGetNewArrivalsQuery = { __typename?: 'QueryRoot', products: { __typename?: 'ProductConnection', edges: Array<{ __typename?: 'ProductEdge', node: { __typename?: 'Product', id: string, handle: string, title: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', id?: string | null, url: any } }> }, priceRange: { __typename?: 'ProductPriceRange', maxVariantPrice: { __typename?: 'MoneyV2', amount: any }, minVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string, title: string } }> } } }> } };
+
+export type ShopifyGetProductsRecommendationsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type ShopifyGetProductsRecommendationsQuery = { __typename?: 'QueryRoot', productRecommendations?: Array<{ __typename?: 'Product', id: string, title: string, handle: string, images: { __typename?: 'ImageConnection', edges: Array<{ __typename?: 'ImageEdge', node: { __typename?: 'Image', url: any, id?: string | null } }> }, priceRange: { __typename?: 'ProductPriceRange', minVariantPrice: { __typename?: 'MoneyV2', amount: any }, maxVariantPrice: { __typename?: 'MoneyV2', amount: any } }, collections: { __typename?: 'CollectionConnection', edges: Array<{ __typename?: 'CollectionEdge', node: { __typename?: 'Collection', id: string, handle: string } }> } }> | null };

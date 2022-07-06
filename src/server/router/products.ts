@@ -1,12 +1,13 @@
 import { createRouter } from "./context";
 import { z } from "zod";
 import type { ResponseShopify } from ".";
-import {
+import type {
   ShopifyGetAllProductsQuery,
   ShopifyGetNewArrivalsQuery,
   ShopifyGetProductByHandleQuery,
   ShopifyGetProductByHandleVariantBySelectedOptionsQuery,
   ShopifyGetProductByIdQuery,
+  ShopifyGetProductsRecommendationsQuery,
 } from "types/shopify.type";
 import { ProductSchema } from "./schema";
 export const GetProductRouter = createRouter()
@@ -68,6 +69,21 @@ export const GetProductRouter = createRouter()
       const data = (await ctx.shopifyStore.query({
         data: { query: ProductSchema.getNewArrivals, variables: { first: 8 } },
       })) as ResponseShopify<ShopifyGetNewArrivalsQuery>;
+      if (data.body.errors) console.error(data.body.errors);
+      return data.body.data;
+    },
+  })
+  .query("getProductsRecommendations", {
+    input: z.object({
+      id: z.string(),
+    }),
+    async resolve({ input, ctx }) {
+      const data = (await ctx.shopifyStore.query({
+        data: {
+          query: ProductSchema.getProductsRecommendations,
+          variables: { id: input.id },
+        },
+      })) as ResponseShopify<ShopifyGetProductsRecommendationsQuery>;
       if (data.body.errors) console.error(data.body.errors);
       return data.body.data;
     },

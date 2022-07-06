@@ -64,3 +64,37 @@ export const getNewArrivals = gql`
   }
   ${FRAGMENT_PRODUCTS}
 `;
+
+export const getProductsRecommendations = gql`
+  query getProductsRecommendations($id: ID!) {
+    productRecommendations(productId: $id) {
+      id
+      images(first: 1) {
+        edges {
+          node {
+            url
+            id
+          }
+        }
+      }
+      title
+      priceRange {
+        minVariantPrice {
+          amount
+        }
+        maxVariantPrice {
+          amount
+        }
+      }
+      handle
+      collections(first: 1) {
+        edges {
+          node {
+            id
+            handle
+          }
+        }
+      }
+    }
+  }
+`;

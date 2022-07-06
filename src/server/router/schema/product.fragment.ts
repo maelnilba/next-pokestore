@@ -11,7 +11,7 @@ export const FRAGMENT_PRODUCTS = gql`
           edges {
             node {
               id
-              src
+              url
             }
           }
         }

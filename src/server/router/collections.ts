@@ -1,6 +1,6 @@
 import { createRouter } from "./context";
 import { z } from "zod";
-import {
+import type {
   ShopifyGetAllCollectionsQuery,
   ShopifyGetCollectionByHandleWithProductsQuery,
   ShopifyGetCollectionByIdQuery,

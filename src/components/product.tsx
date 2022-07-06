@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/future/image";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 interface TImage {
   node: {
     id?: string | null | undefined;
-    src: string;
+    url: string;
   };
 }
 
@@ -13,7 +13,7 @@ interface TCollection {
   node: {
     id: string;
     handle: string;
-    title: string;
+    title?: string;
   };
 }
 
@@ -49,7 +49,7 @@ export function Card(props: CardProps) {
       <article className="card w-80 bg-base-100 shadow-xl cursor-pointer hover:-translate-y-1 hover:scale-110 transition ease-in-out delay-150">
         <figure>
           <Image
-            src={props.images[0]?.node.src || ""}
+            src={props.images[0]?.node.url || ""}
             width="200px"
             height="200px"
             className="w-[200px] h-[200px]"
@@ -80,10 +80,19 @@ interface ImagesPreviewProps {
 }
 // Might find a way to use ONLY css, or at least use css for preview on hover
 export function ImagesPreview(props: ImagesPreviewProps) {
-  const [activeImage, setActiveImage] = useState(props.images[0]);
-  if (!activeImage) return <div>display no image found</div>;
+  const firstImage = useMemo(
+    () => props.images[0] || { node: { id: "", url: "" } },
+    [props]
+  );
+  const [activeImage, setActiveImage] = useState<
+    ImagesPreviewProps["images"][number] | null
+  >(firstImage);
+  useEffect(() => {
+    setActiveImage(firstImage);
+  }, [firstImage]);
+  if (!props.images) return <div>display no image found</div>;
   return (
-    <div className="flex flex-row w-max gap-4 m-2">
+    <div className="flex flex-row w-max gap-4 m-2 flex-[1] justify-end">
       <div className="w-max flex flex-col gap-2 ">
         {props.images.map((image, index) => (
           <Image
@@ -100,7 +109,7 @@ export function ImagesPreview(props: ImagesPreviewProps) {
       </div>
       <div className="w-auto h-auto bg-base-200 rounded-lg p-8">
         <Image
-          src={activeImage?.node.url}
+          src={activeImage?.node.url || props.images[0]?.node.url}
           className="object-cover w-80 h-auto"
         />
       </div>

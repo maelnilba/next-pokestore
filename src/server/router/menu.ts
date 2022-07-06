@@ -1,7 +1,7 @@
 import { createRouter } from "./context";
 import { z } from "zod";
 import { MenuSchema } from "./schema";
-import { ShopifyGetMenuByHandleQuery } from "types/shopify.type";
+import type { ShopifyGetMenuByHandleQuery } from "types/shopify.type";
 import { ResponseShopify } from ".";
 
 export const GetMenuRouter = createRouter().query("getByHandle", {
