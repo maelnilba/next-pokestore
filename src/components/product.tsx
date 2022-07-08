@@ -20,10 +20,10 @@ interface TCollection {
 
 interface TPriceRange {
   maxVariantPrice: {
-    amount: any;
+    amount: string;
   };
   minVariantPrice: {
-    amount: any;
+    amount: string;
   };
 }
 
@@ -75,7 +75,7 @@ interface ImagesPreviewProps {
   images: {
     node: {
       id?: string | null | undefined;
-      url: any;
+      url: string;
     };
   }[];
 }
@@ -110,7 +110,7 @@ export function ImagesPreview(props: ImagesPreviewProps) {
       </div>
       <div className="w-auto h-auto bg-base-200 rounded-lg p-8">
         <Image
-          src={activeImage?.node.url || props.images[0]?.node.url}
+          src={activeImage?.node.url || props.images[0]?.node.url || ""}
           className="object-cover w-80 h-auto"
         />
       </div>
@@ -157,9 +157,6 @@ export const SelectVariant = ({
           </label>
           <select
             onChange={(e) => {
-              console.log({ variants });
-              console.log({ currentVariantOptions });
-
               if (!currentVariantOptions) return;
               let _currentOptions = [...currentVariantOptions];
               if (!_currentOptions) return;
@@ -172,7 +169,6 @@ export const SelectVariant = ({
                   JSON.stringify(edge.selectedOptions) ===
                   JSON.stringify(_currentOptions)
               );
-              console.log({ selected });
               if (!selected) return;
               router.replace({
                 pathname: router.pathname,

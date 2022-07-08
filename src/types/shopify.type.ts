@@ -6846,12 +6846,12 @@ export enum ShopifyWeightUnit {
   Pounds = 'POUNDS'
 }
 
-export type ShopifyCartDetailsFragment = { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } };
+export type ShopifyCartDetailsFragment = { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } };
 
 export type ShopifyCreateCartMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ShopifyCreateCartMutation = { __typename?: 'Mutation', cartCreate?: { __typename?: 'CartCreatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+export type ShopifyCreateCartMutation = { __typename?: 'Mutation', cartCreate?: { __typename?: 'CartCreatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } } | null } | null };
 
 export type ShopifyCartBuyerIdentityUpdateMutationVariables = Exact<{
   cartId: Scalars['ID'];
@@ -6859,7 +6859,7 @@ export type ShopifyCartBuyerIdentityUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ShopifyCartBuyerIdentityUpdateMutation = { __typename?: 'Mutation', cartBuyerIdentityUpdate?: { __typename?: 'CartBuyerIdentityUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+export type ShopifyCartBuyerIdentityUpdateMutation = { __typename?: 'Mutation', cartBuyerIdentityUpdate?: { __typename?: 'CartBuyerIdentityUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } } | null } | null };
 
 export type ShopifyCartDiscountCodesUpdateMutationVariables = Exact<{
   cartId: Scalars['ID'];
@@ -6867,7 +6867,7 @@ export type ShopifyCartDiscountCodesUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ShopifyCartDiscountCodesUpdateMutation = { __typename?: 'Mutation', cartDiscountCodesUpdate?: { __typename?: 'CartDiscountCodesUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+export type ShopifyCartDiscountCodesUpdateMutation = { __typename?: 'Mutation', cartDiscountCodesUpdate?: { __typename?: 'CartDiscountCodesUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } } | null } | null };
 
 export type ShopifyCartLinesAddMutationVariables = Exact<{
   cartId: Scalars['ID'];
@@ -6875,7 +6875,7 @@ export type ShopifyCartLinesAddMutationVariables = Exact<{
 }>;
 
 
-export type ShopifyCartLinesAddMutation = { __typename?: 'Mutation', cartLinesAdd?: { __typename?: 'CartLinesAddPayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+export type ShopifyCartLinesAddMutation = { __typename?: 'Mutation', cartLinesAdd?: { __typename?: 'CartLinesAddPayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } } | null } | null };
 
 export type ShopifyCartLinesRemoveMutationVariables = Exact<{
   cartId: Scalars['ID'];
@@ -6883,7 +6883,7 @@ export type ShopifyCartLinesRemoveMutationVariables = Exact<{
 }>;
 
 
-export type ShopifyCartLinesRemoveMutation = { __typename?: 'Mutation', cartLinesRemove?: { __typename?: 'CartLinesRemovePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+export type ShopifyCartLinesRemoveMutation = { __typename?: 'Mutation', cartLinesRemove?: { __typename?: 'CartLinesRemovePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } } | null } | null };
 
 export type ShopifyCartLinesUpdateMutationVariables = Exact<{
   cartId: Scalars['ID'];
@@ -6891,14 +6891,14 @@ export type ShopifyCartLinesUpdateMutationVariables = Exact<{
 }>;
 
 
-export type ShopifyCartLinesUpdateMutation = { __typename?: 'Mutation', cartLinesUpdate?: { __typename?: 'CartLinesUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null } | null };
+export type ShopifyCartLinesUpdateMutation = { __typename?: 'Mutation', cartLinesUpdate?: { __typename?: 'CartLinesUpdatePayload', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } } | null } | null };
 
 export type ShopifyGetLiteCartQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type ShopifyGetLiteCartQuery = { __typename?: 'QueryRoot', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string } } }> } } | null };
+export type ShopifyGetLiteCartQuery = { __typename?: 'QueryRoot', cart?: { __typename?: 'Cart', id: string, lines: { __typename?: 'CartLineConnection', nodes: Array<{ __typename?: 'CartLine', id: string, quantity: number, merchandise: { __typename?: 'ProductVariant', id: string, title: string, priceV2: { __typename?: 'MoneyV2', amount: any }, image?: { __typename?: 'Image', url: any, id?: string | null } | null, product: { __typename?: 'Product', handle: string, id: string, title: string, collections: { __typename?: 'CollectionConnection', nodes: Array<{ __typename?: 'Collection', handle: string }> } } } }> } } | null };
 
 export type ShopifyGetAllCollectionsQueryVariables = Exact<{
   first: Scalars['Int'];

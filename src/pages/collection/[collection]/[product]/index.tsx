@@ -1,4 +1,5 @@
 import Carousel from "@components/carousel";
+import { QuantityInput } from "@components/input";
 import { Card, ImagesPreview, SelectVariant } from "@components/product";
 import type {
   GetServerSidePropsContext,
@@ -6,7 +7,7 @@ import type {
   NextPage,
 } from "next";
 import { useRouter } from "next/router";
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { trpc } from "utils/trpc";
 import { useStore } from "utils/zustand";
 
@@ -17,6 +18,8 @@ const Index: NextPage<ServerSideProps> = ({
   const router = useRouter();
   const { query } = router;
   const { variant } = query;
+
+  const [quantity, setQuantity] = useState(1);
   const { update } = useStore((store) => ({
     update: store.update,
   }));
@@ -43,14 +46,18 @@ const Index: NextPage<ServerSideProps> = ({
       data && update(data);
     },
   });
-  const handleAddCart = (productId: string) => {
+  const handleAddCart = useCallback((productId: string, quantity: number) => {
     addCart({
       lines: [
         {
           merchandiseId: productId,
+          quantity,
         },
       ],
     });
+  }, []);
+  const handleQuantity = (q: number) => {
+    setQuantity(q);
   };
   if (!product) return <div>is loading...</div>;
   return (
@@ -81,6 +88,12 @@ const Index: NextPage<ServerSideProps> = ({
                     />
                   )}
               </div>
+              <QuantityInput
+                quantity={quantity}
+                onChange={handleQuantity}
+                rangeQuantity={{ max: 20, min: 1 }}
+                label="Quantity"
+              />
               <div className="flex justify-start">
                 <button
                   className="btn gap-2 rounded-md text-base-100"
@@ -88,7 +101,7 @@ const Index: NextPage<ServerSideProps> = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!selectedVariant) return;
-                    handleAddCart(selectedVariant.node.id);
+                    handleAddCart(selectedVariant.node.id, quantity);
                   }}
                 >
                   <svg

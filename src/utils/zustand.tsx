@@ -1,48 +1,24 @@
 import { ReactNode, useMemo } from "react";
 import create, { EqualityChecker, StateSelector } from "zustand";
 import { createContext, useContext } from "react";
+import { InferMutationOutput, InferQueryOutput } from "./trpc";
 
 // https://codesandbox.io/s/ku82o
 
 type StoreType = ReturnType<typeof initStore> | undefined;
 let store: StoreType;
 
-type Cart = {
-  __typename?: string | undefined;
-  cart?:
-    | {
-        __typename?: string | undefined;
-        id: string;
-        lines: {
-          __typename?: "CartLineConnection";
-          nodes: Array<{
-            __typename?: "CartLine";
-            quantity: number;
-            merchandise: {
-              __typename?: "ProductVariant";
-              id: string;
-              title: string;
-              priceV2: {
-                __typename?: "MoneyV2";
-                amount: any;
-              };
-              image?: {
-                __typename?: "Image";
-                url: any;
-                id?: string | null;
-              } | null;
-              product: {
-                __typename?: "Product";
-                handle: string;
-                id: string;
-              };
-            };
-          }>;
-        };
-      }
-    | null
-    | undefined;
-};
+type Cart = NonNullable<
+  | InferQueryOutput<"cart.getCart" | "cart.getCartById">
+  | InferMutationOutput<
+      | "cart.cartLinesAdd"
+      | "cart.cartLinesUpdate"
+      | "cart.cartBuyerIdentityUpdate"
+      | "cart.cartDiscountCodesUpdate"
+      | "cart.cartLinesRemove"
+      | "cart.createCart"
+    >
+>;
 
 export const StoreContext = createContext<StoreType | null>(null);
 type initialStateType = typeof initialState;

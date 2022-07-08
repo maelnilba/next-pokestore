@@ -5,6 +5,7 @@ export const FRAGMENT_CART = gql`
     id
     lines(first: 100) {
       nodes {
+        id
         merchandise {
           ... on ProductVariant {
             id
@@ -19,6 +20,12 @@ export const FRAGMENT_CART = gql`
             product {
               handle
               id
+              title
+              collections(first: 1) {
+                nodes {
+                  handle
+                }
+              }
             }
           }
         }

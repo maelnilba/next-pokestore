@@ -6,11 +6,7 @@ import type { NextPage } from "next";
 import { trpc } from "utils/trpc";
 
 const Index: NextPage = () => {
-  const {
-    data: newArrivals,
-    error,
-    isLoading,
-  } = trpc.useQuery(["products.getNewArrivals"]);
+  const { data: newArrivals } = trpc.useQuery(["products.getNewArrivals"]);
 
   const { data: favorites } = trpc.useQuery([
     "collections.getByHandleWithProducts",

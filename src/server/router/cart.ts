@@ -152,7 +152,7 @@ export const GetCartRouter = createRouter()
   })
   .mutation("cartLinesRemove", {
     input: z.object({
-      linesIds: z.string().array(),
+      lineIds: z.string().array(),
     }),
     async resolve({ input, ctx }) {
       const cartId = getCardIdCookie({
@@ -164,7 +164,7 @@ export const GetCartRouter = createRouter()
           query: CartSchema.cartLinesRemove,
           variables: {
             cartId: cartId,
-            linesIds: input.linesIds,
+            lineIds: input.lineIds,
           },
         },
       })) as ResponseShopify<ShopifyCartLinesRemoveMutation>;

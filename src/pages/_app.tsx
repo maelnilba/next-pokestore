@@ -12,9 +12,13 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
     <StoreProvider store={store}>
-      <NavigationBar />
-      <Component {...pageProps} />
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <NavigationBar />
+        <div className="flex-grow">
+          <Component {...pageProps} />
+        </div>
+        <Footer />
+      </div>
     </StoreProvider>
   );
 };
