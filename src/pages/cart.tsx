@@ -2,33 +2,28 @@ import Image from "next/future/image";
 import type { NextPage } from "next";
 import { useCallback, useMemo } from "react";
 import { trpc } from "utils/trpc";
-import { useStore } from "utils/zustand";
-import shallow from "zustand/shallow";
 import { QuantityInput } from "@components/input";
+import { useQueryClient } from "react-query";
 
 const Index: NextPage = () => {
-  const { update, cart } = useStore(
-    (store) => ({
-      cart: store.cart,
-      update: store.update,
-    }),
-    shallow
-  );
-  const { data } = trpc.useQuery(["cart.getCart"], {
-    onSuccess: (data) => {
-      update(data);
-    },
+  const client = useQueryClient();
+
+  const { data: cart } = trpc.useQuery(["cart.getCart"], {
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   const { mutate: removeCart } = trpc.useMutation(["cart.cartLinesRemove"], {
     onSuccess: (data) => {
-      data && update(data);
+      data && client.setQueryData("cart.getCart", data);
+      // data && update(data);
     },
   });
 
   const { mutate: updateCart } = trpc.useMutation(["cart.cartLinesUpdate"], {
     onSuccess: (data) => {
-      data && update(data);
+      data && client.setQueryData("cart.getCart", data);
+      // data && update(data);
     },
   });
 
@@ -40,7 +35,7 @@ const Index: NextPage = () => {
 
   const subTotal = useMemo(
     () =>
-      cart.cart?.lines.nodes.reduce(
+      cart?.cart?.lines.nodes.reduce(
         (acc, line) =>
           (acc += +line.merchandise.priceV2.amount * line.quantity),
         0

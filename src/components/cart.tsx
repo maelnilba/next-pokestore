@@ -1,27 +1,20 @@
 import Image from "next/future/image";
 import Link from "next/link";
 import { useMemo } from "react";
+import { useQueryClient } from "react-query";
 import { trpc } from "utils/trpc";
-import { useStore } from "utils/zustand";
-import shallow from "zustand/shallow";
 
 export const CardDropdown = () => {
-  const { update, cart } = useStore(
-    (store) => ({
-      cart: store.cart,
-      update: store.update,
-    }),
-    shallow
-  );
-  const { data } = trpc.useQuery(["cart.getCart"], {
-    onSuccess: (data) => {
-      update(data);
-    },
+  const client = useQueryClient();
+
+  const { data: cart } = trpc.useQuery(["cart.getCart"], {
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
   const { mutate: removeCart } = trpc.useMutation(["cart.cartLinesRemove"], {
     onSuccess: (data) => {
-      data && update(data);
+      data && client.setQueryData("cart.getCart", data);
     },
   });
 
@@ -30,10 +23,10 @@ export const CardDropdown = () => {
       lineIds: [lineId],
     });
   };
-  const linesCount = useMemo(() => cart.cart?.lines.nodes.length || 0, [cart]);
+  const linesCount = useMemo(() => cart?.cart?.lines.nodes.length || 0, [cart]);
   const subTotal = useMemo(
     () =>
-      cart.cart?.lines.nodes.reduce(
+      cart?.cart?.lines.nodes.reduce(
         (acc, line) =>
           (acc += +line.merchandise.priceV2.amount * line.quantity),
         0
@@ -68,8 +61,8 @@ export const CardDropdown = () => {
         <div className="card-body">
           <span className="font-bold text-lg">{linesCount} Items</span>
           <div className="flex flex-col gap-4">
-            {cart.cart &&
-              cart.cart.lines.nodes.map((line) => (
+            {cart?.cart &&
+              cart?.cart.lines.nodes.map((line) => (
                 <Link
                   href={`/collection/${line.merchandise.product.collections.nodes[0]?.handle}/${line.merchandise.product.handle}`}
                   passHref

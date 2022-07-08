@@ -3,23 +3,18 @@ import type { AppRouter } from "../server/router";
 import type { AppType } from "next/dist/shared/lib/utils";
 import superjson from "superjson";
 import "../styles/globals.css";
-import { StoreProvider, useHydrate } from "utils/zustand";
 import NavigationBar from "@components/navigation";
 import Footer from "@components/footer";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  const store = useHydrate(pageProps.initialZustandState);
-
   return (
-    <StoreProvider store={store}>
-      <div className="flex flex-col min-h-screen">
-        <NavigationBar />
-        <div className="flex-grow">
-          <Component {...pageProps} />
-        </div>
-        <Footer />
+    <div className="flex flex-col min-h-screen">
+      <NavigationBar />
+      <div className="flex-grow">
+        <Component {...pageProps} />
       </div>
-    </StoreProvider>
+      <Footer />
+    </div>
   );
 };
 

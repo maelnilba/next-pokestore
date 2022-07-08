@@ -9,7 +9,6 @@ import type {
 } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
-import { useStore } from "utils/zustand";
 import { appRouter, ResponseShopify } from "server/router";
 import { shopifyStore } from "server/shopify/client";
 import { CollectionSchema } from "server/router/schema";
@@ -17,21 +16,26 @@ import type { ShopifyGetAllCollectionsWithProductQuery } from "types/shopify.typ
 import { createSSGHelpers } from "@trpc/react/ssg";
 import { trpc } from "utils/trpc";
 import superjson from "superjson";
+import { useQueryClient } from "react-query";
 
 const Index: NextPage<StaticProps> = ({ handleCollection, handleProduct }) => {
   const router = useRouter();
   const { query } = router;
   const { variant } = query;
+  const client = useQueryClient();
 
   const [quantity, setQuantity] = useState(1);
-  const { update } = useStore((store) => ({
-    update: store.update,
-  }));
 
   const { data: product } = trpc.useQuery([
     "products.getProductVariantsByHandle",
     { handle: handleProduct },
   ]);
+
+  const { mutate: addCart } = trpc.useMutation(["cart.cartLinesAdd"], {
+    onSuccess: (data) => {
+      data && client.setQueryData("cart.getCart", data);
+    },
+  });
 
   const selectedVariant = useMemo(() => {
     if (!product) return undefined;
@@ -45,11 +49,7 @@ const Index: NextPage<StaticProps> = ({ handleCollection, handleProduct }) => {
       );
     }
   }, [product, variant]);
-  const { mutate: addCart } = trpc.useMutation(["cart.cartLinesAdd"], {
-    onSuccess: (data) => {
-      data && update(data);
-    },
-  });
+
   const handleAddCart = useCallback((productId: string, quantity: number) => {
     addCart({
       lines: [
