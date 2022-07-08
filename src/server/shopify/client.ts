@@ -13,7 +13,7 @@ Shopify.Context.initialize({
 // https://github.com/Maxvien/graphql-code-generator-for-shopify-example/blob/master/src/index.ts
 export const shopifyStore = new Shopify.Clients.Storefront(
   process.env.NEXT_PUBLIC_SHOP || "",
-  process.env.API_STOREFRONT_KEY
+  process.env.NEXT_PUBLIC_API_STOREFRONT_KEY
 );
 
 // Storing the currently active shops in memory will force them to re-login when your server restarts. You should

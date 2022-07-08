@@ -63,20 +63,13 @@ const Index: NextPage = () => {
         <article className="prose lg:prose-xl p-4 text-justify">
           <h1>PokéStore explained etc. :</h1>
           <p>
-            La Boutique Pokémon est un magasin trouvable dans la plupart des
-            villes que le joueur visitera, dotée d'un toit bleu caractéristique.
-            Elle permet l'achat comme la vente des objets trouvables durant la
-            partie, principalement des articles de soin, des accessoires pour
-            l'aventure et des Balls. Au fur et à mesure de la progression du
-            joueur, la gamme d'objets proposés s'élargit et s'améliore (par
-            exemple : Poké Ball ► Super Ball ► Hyper Ball). Il existe aussi dans
-            chaque version du jeu un grand magasin (Centre Commercial), offrant
+            This is a prototype-ish e-shop website with NextJS and Shopify as
+            back API, rather than the front solution offer by Shopify. The goal
+            is to allow other usecases. Currently in work in progress.
           </p>
           <p>
-            le plus vaste choix de marchandises. À partir de la cinquième
-            génération, la Boutique Pokémon a "fusionné" avec le Centre Pokémon.
-            Dans la huitième génération, il y a une boutique dans chaque Centre
-            Pokémon, Gare, et Stade.
+            Remains todos: - SSG with tRPC - Account and Checkout - Footer pages
+            - LocalStorage recently seen
           </p>
         </article>
         <div className="divider"></div>

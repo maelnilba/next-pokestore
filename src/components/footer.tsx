@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const Footer: React.FC = () => {
   return (
     <footer className="footer p-10 bg-base-200 text-base-content">
@@ -20,24 +22,25 @@ const Footer: React.FC = () => {
         </p>
       </div>
       <div>
-        <span className="footer-title">Services</span>
-        <a className="link link-hover">Branding</a>
-        <a className="link link-hover">Design</a>
-        <a className="link link-hover">Marketing</a>
-        <a className="link link-hover">Advertisement</a>
-      </div>
-      <div>
         <span className="footer-title">Company</span>
-        <a className="link link-hover">About us</a>
-        <a className="link link-hover">Contact</a>
-        <a className="link link-hover">Jobs</a>
-        <a className="link link-hover">Press kit</a>
+        <Link href="/about" passHref>
+          <a className="link link-hover">About us</a>
+        </Link>
+        <Link href="/contact" passHref>
+          <a className="link link-hover">Contact</a>
+        </Link>
       </div>
       <div>
         <span className="footer-title">Legal</span>
-        <a className="link link-hover">Terms of use</a>
-        <a className="link link-hover">Privacy policy</a>
-        <a className="link link-hover">Cookie policy</a>
+        <Link href="/tos" passHref>
+          <a className="link link-hover">Terms of use</a>
+        </Link>
+        <Link href="/privacy" passHref>
+          <a className="link link-hover">Privacy policy</a>
+        </Link>
+        <Link href="/privacy" passHref>
+          <a className="link link-hover">Cookie policy</a>
+        </Link>
       </div>
     </footer>
   );

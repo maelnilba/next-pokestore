@@ -3,6 +3,7 @@ import { QuantityInput } from "@components/input";
 import { Card, ImagesPreview, SelectVariant } from "@components/product";
 import type {
   GetServerSidePropsContext,
+  GetStaticPaths,
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
@@ -180,5 +181,23 @@ export const getServerSideProps = async (
     },
   };
 };
+
+// export const getStaticPaths: GetStaticPaths = async () => {
+//   const posts = await prisma.post.findMany({
+//     select: {
+//       id: true,
+//     },
+//   });
+
+//   return {
+//     paths: posts.map((post) => ({
+//       params: {
+//         id: post.id,
+//       },
+//     })),
+//     // https://nextjs.org/docs/basic-features/data-fetching#fallback-blocking
+//     fallback: 'blocking',
+//   };
+// };
 
 export default Index;

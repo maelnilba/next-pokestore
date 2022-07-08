@@ -2,13 +2,20 @@ import Gallery from "@components/gallery";
 import { CollectionsList } from "@components/navigation";
 import { Card } from "@components/product";
 import type {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
+  GetStaticPaths,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
   NextPage,
 } from "next";
+import { appRouter, ResponseShopify } from "server/router";
+import { MenuSchema } from "server/router/schema";
+import { shopifyStore } from "server/shopify/client";
+import type { ShopifyGetMenuByHandleQuery } from "types/shopify.type";
+import { createSSGHelpers } from "@trpc/react/ssg";
 import { trpc } from "utils/trpc";
+import superjson from "superjson";
 
-const Index: NextPage<ServerSideProps> = ({ handleCollection }) => {
+const Index: NextPage<StaticProps> = ({ handleCollection }) => {
   const { data: menu } = trpc.useQuery([
     "menu.getByHandle",
     { handle: "collections" },
@@ -55,17 +62,63 @@ const Index: NextPage<ServerSideProps> = ({ handleCollection }) => {
     </div>
   );
 };
-// To do SSG later, SSR too consuming and work not well
-// https://trpc.io/docs/ssg
-type ServerSideProps = InferGetServerSidePropsType<typeof getServerSideProps>;
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+
+type StaticProps = InferGetStaticPropsType<typeof getStaticProps>;
+export async function getStaticProps(
+  context: GetStaticPropsContext<{ collection: string }>
+) {
+  const ssg = await createSSGHelpers({
+    router: appRouter,
+    ctx: {
+      req: null as any,
+      res: null as any,
+      shopifyStore: shopifyStore,
+    },
+    transformer: superjson,
+  });
   const handleCollection = context.params?.collection as string;
+
+  await ssg.fetchQuery("collections.getByHandleWithProducts", {
+    handle: handleCollection,
+  });
+
   return {
     props: {
-      handleCollection: handleCollection || "",
+      trpcState: ssg.dehydrate(),
+      handleCollection,
     },
+    revalidate: 1,
+  };
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const getHandle = (url: string) => {
+    const absoluteShopUrl = `https://${process.env.NEXT_PUBLIC_SHOP}/`;
+    if (url.includes(absoluteShopUrl)) {
+      const split = url.replace(absoluteShopUrl, "").split("/");
+      if (split.length > 1)
+        if (split[0] === "collections") {
+          return split[split.length - 1] || "/";
+        }
+    }
+    return "/";
+  };
+  const collections = (await shopifyStore.query({
+    data: {
+      query: MenuSchema.getByHandle,
+      variables: { handle: "collections" },
+    },
+  })) as ResponseShopify<ShopifyGetMenuByHandleQuery>;
+  if (collections.body.errors) console.error(collections.body.errors);
+
+  return {
+    paths: collections.body.data.menu!.items.map((item) => ({
+      params: {
+        collection: getHandle(item.url),
+      },
+    })),
+    // https://nextjs.org/docs/basic-features/data-fetching#fallback-blocking
+    fallback: "blocking",
   };
 };
 
