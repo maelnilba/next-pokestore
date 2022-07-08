@@ -68,8 +68,9 @@ const Index: NextPage = () => {
             is to allow other usecases. Currently in work in progress.
           </p>
           <p>
-            Remains todos: - SSG with tRPC - Account and Checkout - Footer pages
-            - LocalStorage recently seen
+            Remains todos: - SSG with tRPC for all pages (only collections and
+            products right now) - Account and Checkout - Footer pages -
+            LocalStorage recently seen
           </p>
         </article>
         <div className="divider"></div>

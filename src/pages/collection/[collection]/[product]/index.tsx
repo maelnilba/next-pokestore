@@ -2,20 +2,23 @@ import Carousel from "@components/carousel";
 import { QuantityInput } from "@components/input";
 import { Card, ImagesPreview, SelectVariant } from "@components/product";
 import type {
-  GetServerSidePropsContext,
   GetStaticPaths,
-  InferGetServerSidePropsType,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
   NextPage,
 } from "next";
 import { useRouter } from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { trpc } from "utils/trpc";
+import { useCallback, useMemo, useState } from "react";
 import { useStore } from "utils/zustand";
+import { appRouter, ResponseShopify } from "server/router";
+import { shopifyStore } from "server/shopify/client";
+import { CollectionSchema } from "server/router/schema";
+import type { ShopifyGetAllCollectionsWithProductQuery } from "types/shopify.type";
+import { createSSGHelpers } from "@trpc/react/ssg";
+import { trpc } from "utils/trpc";
+import superjson from "superjson";
 
-const Index: NextPage<ServerSideProps> = ({
-  handleCollection,
-  handleProduct,
-}) => {
+const Index: NextPage<StaticProps> = ({ handleCollection, handleProduct }) => {
   const router = useRouter();
   const { query } = router;
   const { variant } = query;
@@ -168,36 +171,68 @@ const Recommendations: React.FC<{ productId: string }> = ({ productId }) => {
   );
 };
 
-type ServerSideProps = InferGetServerSidePropsType<typeof getServerSideProps>;
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
+type StaticProps = InferGetStaticPropsType<typeof getStaticProps>;
+export async function getStaticProps(
+  context: GetStaticPropsContext<{ collection: string; product: string }>
+) {
+  const ssg = await createSSGHelpers({
+    router: appRouter,
+    ctx: {
+      req: null as any,
+      res: null as any,
+      shopifyStore: shopifyStore,
+    },
+    transformer: superjson, // optional - adds superjson serialization
+  });
   const handleCollection = context.params?.collection as string;
   const handleProduct = context.params?.product as string;
+
+  await ssg.fetchQuery("products.getProductVariantsByHandle", {
+    handle: handleProduct,
+  });
+
   return {
     props: {
-      handleCollection: handleCollection || "",
-      handleProduct: handleProduct || "",
+      trpcState: ssg.dehydrate(),
+      handleCollection,
+      handleProduct,
     },
+    revalidate: 1,
+  };
+}
+
+interface Path {
+  collection: string;
+  product: string;
+}
+export const getStaticPaths: GetStaticPaths = async () => {
+  const collections = (await shopifyStore.query({
+    data: {
+      query: CollectionSchema.getAllCollectionsWithProduct,
+      variables: { first: 250 },
+    },
+  })) as ResponseShopify<ShopifyGetAllCollectionsWithProductQuery>;
+  let paths: Path[] = [];
+  if (collections.body.data.collections) {
+    for (const collection of collections.body.data.collections.edges) {
+      for (const product of collection.node.products.nodes) {
+        paths = [
+          ...paths,
+          { collection: collection.node.handle, product: product.handle },
+        ];
+      }
+    }
+  }
+
+  return {
+    paths: paths.map((path) => ({
+      params: {
+        collection: path.collection,
+        product: path.product,
+      },
+    })),
+    fallback: "blocking",
   };
 };
-
-// export const getStaticPaths: GetStaticPaths = async () => {
-//   const posts = await prisma.post.findMany({
-//     select: {
-//       id: true,
-//     },
-//   });
-
-//   return {
-//     paths: posts.map((post) => ({
-//       params: {
-//         id: post.id,
-//       },
-//     })),
-//     // https://nextjs.org/docs/basic-features/data-fetching#fallback-blocking
-//     fallback: 'blocking',
-//   };
-// };
 
 export default Index;

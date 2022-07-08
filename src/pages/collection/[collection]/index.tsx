@@ -8,9 +8,9 @@ import type {
   NextPage,
 } from "next";
 import { appRouter, ResponseShopify } from "server/router";
-import { MenuSchema } from "server/router/schema";
+import { CollectionSchema, MenuSchema } from "server/router/schema";
 import { shopifyStore } from "server/shopify/client";
-import type { ShopifyGetMenuByHandleQuery } from "types/shopify.type";
+import type { ShopifyGetAllCollectionsQuery } from "types/shopify.type";
 import { createSSGHelpers } from "@trpc/react/ssg";
 import { trpc } from "utils/trpc";
 import superjson from "superjson";
@@ -82,6 +82,10 @@ export async function getStaticProps(
     handle: handleCollection,
   });
 
+  await ssg.fetchQuery("menu.getByHandle", {
+    handle: "collections",
+  });
+
   return {
     props: {
       trpcState: ssg.dehydrate(),
@@ -91,33 +95,34 @@ export async function getStaticProps(
   };
 }
 
+interface Path {
+  collection: string;
+}
 export const getStaticPaths: GetStaticPaths = async () => {
-  const getHandle = (url: string) => {
-    const absoluteShopUrl = `https://${process.env.NEXT_PUBLIC_SHOP}/`;
-    if (url.includes(absoluteShopUrl)) {
-      const split = url.replace(absoluteShopUrl, "").split("/");
-      if (split.length > 1)
-        if (split[0] === "collections") {
-          return split[split.length - 1] || "/";
-        }
-    }
-    return "/";
-  };
   const collections = (await shopifyStore.query({
     data: {
-      query: MenuSchema.getByHandle,
-      variables: { handle: "collections" },
+      query: CollectionSchema.getAllCollections,
+      variables: { first: 250 },
     },
-  })) as ResponseShopify<ShopifyGetMenuByHandleQuery>;
-  if (collections.body.errors) console.error(collections.body.errors);
+  })) as ResponseShopify<ShopifyGetAllCollectionsQuery>;
+  let paths: Path[] = [];
+  if (collections.body.data.collections) {
+    for (const collection of collections.body.data.collections.edges) {
+      paths = [
+        ...paths,
+        {
+          collection: collection.node.handle,
+        },
+      ];
+    }
+  }
 
   return {
-    paths: collections.body.data.menu!.items.map((item) => ({
+    paths: paths.map((path) => ({
       params: {
-        collection: getHandle(item.url),
+        collection: path.collection,
       },
     })),
-    // https://nextjs.org/docs/basic-features/data-fetching#fallback-blocking
     fallback: "blocking",
   };
 };
